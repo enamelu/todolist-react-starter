@@ -63,22 +63,72 @@ const TodoPage = () => {
     });
     setInputValue('');
   };
-  
+  const handleToggleDone = (id) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            isDone: !todo.isDone,
+          };
+        }
+        return todo;
+      });
+    });
+  };
+  const handleChangeMode = ({ id, isEdit }) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            isEdit,
+          };
+        }
+        return { ...todo, isEdit: false };
+      });
+    });
+  };
+  const handleSave = ({ id, title }) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            id,
+            title,
+            isEdit: false,
+          };
+        }
+        return todo;
+      });
+    });
+  };
+  const handleDelete = ( id ) => {
+    setTodos(todos.filter(todo => todo.id !== id))
+  };
   return (
     <div>
       TodoPage
-      <Header username="coffee" />
+      <Header />
       <TodoInput
         inputValue={inputValue}
         onChange={handleChange}
         onAddTodo={handleAddTodo}
         onKeyDown={handleKeyDowm}
       />
-      <TodoCollection todos={todos} />
-      <Footer />
+      <TodoCollection
+        todos={todos}
+        onSave={handleSave}
+        onToggleDone={handleToggleDone}
+        onChangeMode={handleChangeMode}
+        onDelete={handleDelete}
+      />
+      <Footer num={todos.length}/>
     </div>
   );
-};
+}
+
 export default TodoPage;
 
  
